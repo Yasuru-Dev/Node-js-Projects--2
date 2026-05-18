@@ -2,10 +2,10 @@ const express = require("express");
 const bcrypt = require("bcrypt");           
 const User = require("../models/User");     
 
-const router = express.Router();
+const router = express.Router();//important for creating routes
 
 // TEST ROUTE
-router.get("/", (req, res) => {
+router.get("/", (req, res) => {//this mean homepage of auth route
     res.send("Auth Route Working");
 });
 
@@ -30,6 +30,48 @@ router.post("/register", async (req, res) => {
         console.log(error);
         res.status(500).json({ message: "Something went wrong" });
     }
+});
+
+//login route
+router.post("/login", async (req, res) => {
+
+    try {
+
+        // GET DATA
+        const { username, password } = req.body;
+
+
+        // FIND USER
+        const user = await User.findOne({ username });
+
+
+        // CHECK USER EXISTS
+        if (!user) {
+            return res.send("User not found");
+        }
+
+
+        // CHECK PASSWORD
+        const isMatch = await bcrypt.compare(password, user.password);
+
+
+        if (!isMatch) {
+            return res.send("Invalid password");
+        }
+
+
+        // LOGIN SUCCESS
+        res.send("Login successful");
+
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.send("Something went wrong");
+
+    }
+
 });
 
 module.exports = router;
