@@ -1,6 +1,6 @@
 const express = require("express");
 //const brypt = require("bcrypt");
-const Note = require("../models/Note");//import Note model from models folder
+const Note = require("../models/note");//import Note model from models folder
 const router = express.Router();//create mini route manger
 
 //create 
@@ -34,3 +34,9 @@ router.get("/notes/:id", async(req,res)=>{
 );
 
 //delete note
+router.delete("/notes/:id", async(req,res)=> {
+    await Note.findByIdAndDelete(req.parms.id);
+    res.send("Note deleted");
+});
+
+module.exports = router;
