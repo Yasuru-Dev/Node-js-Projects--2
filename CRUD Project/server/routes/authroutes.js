@@ -22,21 +22,29 @@ router.get("/notes", async(req,res)=>{
     res.json(notes);
 });
 
-//get single note
-router.get("/notes/:id", async(req,res)=>{
-    const note = await Note.findById(req.params.id);
+/// SEARCH NOTES
+router.get("/search", async (req, res) => {
 
-    if(!note){
-        return res.status(404).send("Note not found");
-    }
-    res.json(note);
-}
-);
+    const title = req.query.title;
 
+    const notes = await Note.find({
+
+        title: {
+            $regex: title,
+            $options: "i"
+        }
+
+    });
+
+    res.json(notes);
+
+});
 //delete note
 router.delete("/notes/:id", async(req,res)=> {
-    await Note.findByIdAndDelete(req.parms.id);
+    await Note.findByIdAndDelete(req.params.id);
     res.send("Note deleted");
 });
+
+
 
 module.exports = router;
