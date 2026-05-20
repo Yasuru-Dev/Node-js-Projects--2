@@ -8,7 +8,7 @@ const app = express();
 
 
 // Middleware
-app.use(express.json());
+app.use(express.json());//without this we cant access req.body
 app.use(cors());
 
 
